@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{ fragments :: styles }" />
+    <title>Crea la tua pizza</title>
+</head>
+<body>
+    <header>
+        <th:block th:replace="~{fragments :: header('createPage')}"></th:block>
+    </header>
+
+    <main>
+        <div class="container px-0">
+            <th:block th:replace="~{fragments :: pizzaFormCreate}" />
+        </div>
+    </main>
+</body>
+</html>

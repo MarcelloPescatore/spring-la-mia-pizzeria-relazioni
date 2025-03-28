@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{ fragments :: styles }" />
+    <title>Homepage</title>
+</head>
+
+<body>
+    <header>
+        <th:block th:replace="~{fragments :: header('homePage')}"></th:block>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>Questa è l'Homepage ciao</h1>
+        </div>
+    </main>
+</body>
+
+</html>

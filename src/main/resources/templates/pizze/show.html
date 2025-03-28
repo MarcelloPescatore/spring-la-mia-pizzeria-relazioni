@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{ fragments :: styles }" />
+    <title>Pizze</title>
+</head>
+
+<body>
+    <header>
+        <th:block th:replace="~{fragments :: header('detailsPage')}"></th:block>
+    </header>
+
+    <main>
+        <th:block th:replace="~{fragments :: pizzaDetails} "></th:block>
+    </main>
+</body>
+
+</html>
