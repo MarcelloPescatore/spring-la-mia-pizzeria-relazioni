@@ -45,21 +45,14 @@ public class SpecialOffer {
     @JoinColumn(name = "pizza_id", nullable = false)
     private Pizza pizza;
 
-    /* costruttori */
-    public SpecialOffer() {
-    }
-
-    public SpecialOffer(LocalDate startDate, LocalDate endDate, String nome, String descrizione, Pizza pizza) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.nome = nome;
-        this.descrizione = descrizione;
-        this.pizza = pizza;
-    }
 
     // Getter e Setter
     public Integer getId() {
         return id;
+    }
+
+    public void setId( Integer id) {
+        this.id=id;
     }
 
     public LocalDate getStartDate() {

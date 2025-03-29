@@ -114,7 +114,7 @@
 
         <div class="container">
             <div class="d-flex justify-content-center mt-4">
-                <div class="col-6 pe-5">
+                <div class="col-7 pe-5">
                     <!-- info -->
                     <h1>[[*{nome}]]</h1>
                     <ul>
@@ -127,11 +127,36 @@
                         <a th:href="@{/pizze/edit/{id}(id=*{id})}" class="btn btn-warning">
                             <i class="bi bi-magic"></i>
                         </a>
-                        <form th:action="@{/pizze/delete/{id}(id=${pizza.id})}" method="post">
-                            <button type="submit" class="btn btn-danger">
-                                <i class="bi bi-trash3"></i>
-                            </button>
-                        </form>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            th:data-bs-target="'#delete-modal-' + ${pizza.id}">
+                            <i class="bi bi-trash3"></i>
+                        </button>
+
+                        <!-- modale -->
+                        <div class="modal fade" th:id="'delete-modal-' + ${pizza.id}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Attenzione</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Sei sicuro di voler eliminare la pizza <strong>"[[${pizza.nome}]]"</strong>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Annulla</button>
+                                        <form th:action="@{/pizze/delete/{id}(id=${pizza.id})}" method="post">
+                                            <button type="submit" class="btn btn-danger">
+                                                Elimina
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- table offerte -->
@@ -142,28 +167,70 @@
                                 Non ci sono offerte speciali per questa pizza
                             </div>
                         </div>
-                        <!-- Tabella delle offerte -->
                         <table class="table" th:if="${pizza.getSpecialOffers.size() > 0}">
                             <thead>
                                 <tr>
-                                    <th  class="fw-bold">Descrizione</th>
-                                    <th  class="fw-bold">Nome</th>
-                                    <th  class="fw-bold">Data Inizio</th>
-                                    <th  class="fw-bold">Data Fine</th>
+                                    <th class="fw-bold">Descrizione</th>
+                                    <th class="fw-bold">Nome</th>
+                                    <th class="fw-bold">Data Inizio</th>
+                                    <th class="fw-bold">Data Fine</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each=" specialOffer : ${pizza.specialOffers}" >
+                                <tr th:each=" specialOffer : ${pizza.specialOffers}">
                                     <td>[[${specialOffer.descrizione}]]</td>
                                     <td>[[${specialOffer.nome}]]</td>
                                     <td>[[${specialOffer.startDate}]]</td>
                                     <td>[[${specialOffer.endDate}]]</td>
+                                    <td>
+                                        <a th:href="@{/specialOffer/edit/{id}(id=${specialOffer.id})}"
+                                            class="btn btn-warning">
+                                            <i class="bi bi-magic"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                            th:data-bs-target="|#delete-modal-${specialOffer.id}|">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                        <!-- modale -->
+                                        <div class="modal fade" th:id="|delete-modal-${specialOffer.id}|"
+                                            tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Attenzione
+                                                        </h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Sei sicuro di voler eliminare l'offerta
+                                                        <strong>"[[${specialOffer.nome}]]"</strong>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Annulla</button>
+                                                        <form
+                                                            th:action="@{/specialOffer/delete/{id}(id=${specialOffer.id})}"
+                                                            method="post">
+                                                            <button type="submit" class="btn btn-danger">
+                                                                Elimina Offerta
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-5">
                     <img th:src="@{*{fotoUrl}}" class="rounded" style="object-fit: cover; width: 100%;" alt="">
                 </div>
             </div>
@@ -256,8 +323,9 @@
     </th:block>
 
     <!-- form create or edit -->
-    <th:block th:fragment="specialOfferForm">
-        <form id="pizza-form" th:action="${edit} ? @{|/specialOffer/edit/${specialOffer.id}|} : @{/specialOffer/create}" th:object="${specialOffer}" method="post">
+    <th:block th:fragment="specialOfferForm" >
+        <form id="pizza-form" th:action="${edit} ? @{|/specialOffer/edit/${specialOffer.id}|} : @{/specialOffer/create}"
+             method="post" th:object="${specialOffer}">
             <input type="hidden" th:field="*{pizza}" id="linked-pizza">
 
             <!-- Nome -->
@@ -294,7 +362,7 @@
             </div>
 
             <!-- Pulsanti -->
-            <button type="submit" class="btn btn-success">Aggiungi Offerta</button>
+            <button type="submit" class="btn btn-success" th:text="${edit} ? 'Modifica offerta' : 'Aggiungi Offerta'"></button>
             <a th:href="@{/pizze/index}" class="btn btn-warning">Annulla</a>
         </form>
     </th:block>
