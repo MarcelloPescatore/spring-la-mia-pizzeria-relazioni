@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{ fragments :: styles }" />
+    <title>Crea l'offerta speciale</title>
+</head>
+
+<body>
+    <header>
+        <th:block th:replace="~{fragments :: header('createPage')}"></th:block>
+    </header>
+
+    <main>
+        <div class=" container mt-5">
+            <h5 class="mb-2 fw-bold">Ingredienti</h5>
+            <table class="table" th:if="${ingredients.size() > 0}">
+                <thead>
+                    <tr>
+                        <th class="fw-bold">Nome</th>
+                        <th class="fw-bold">Numero di Pizze</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each=" ingredient : ${ingredients}">
+                        <td>[[${ingredient.nome}]]</td>
+                        <td>[[${ingredient.pizze.size()}]]</td>
+                        <td>
+                            <a th:href="@{/ingredient/edit/{id}(id=${ingredient.id})}"
+                                class="btn btn-warning">
+                                <i class="bi bi-magic"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                th:data-bs-target="|#delete-modal-${ingredient.id}|">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+                            <!-- modale -->
+                            <div class="modal fade" th:id="|delete-modal-${ingredient.id}|"
+                                tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Attenzione
+                                            </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Sei sicuro di voler eliminare l'offerta
+                                            <strong>"[[${ingredient.nome}]]"</strong>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Annulla</button>
+                                            <form
+                                                th:action="@{/ingredient/delete/{id}(id=${ingredient.id})}"
+                                                method="post">
+                                                <button type="submit" class="btn btn-danger">
+                                                    Elimina Offerta
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <th:block th:replace="~{fragments :: bootstrap-script}"/>
+</body>
+
+</html>

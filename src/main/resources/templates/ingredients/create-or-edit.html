@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{ fragments :: styles }" />
+    <title>Crea l'offerta speciale</title>
+</head>
+
+<body>
+    <header>
+        <th:block th:replace="~{fragments :: header('createPage')}"></th:block>
+    </header>
+
+    <main>
+        <div class="container px-0">
+            <form id="ingredient-form"
+                th:action="${edit} ? @{|/ingredient/edit/${ingredient.id}|} : @{/ingredient/create}" method="post"
+                th:object="${ingredient}">
+
+                <!-- Nome -->
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome</label>
+                    <input type="text" id="nome" name="nome" class="form-control" th:field="*{nome}"
+                        th:errorclass="is-invalid" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                </div>
+
+                <!-- Pulsanti -->
+                <button type="submit" class="btn btn-success"
+                    th:text="${edit} ? 'Modifica ingrediente' : 'Aggiungi ingrediente'"></button>
+                <a th:href="@{/pizze/index}" class="btn btn-warning">Annulla</a>
+            </form>
+        </div>
+    </main>
+
+</body>
+
+</html>

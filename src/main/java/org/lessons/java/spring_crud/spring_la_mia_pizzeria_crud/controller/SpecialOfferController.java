@@ -23,7 +23,7 @@ public class SpecialOfferController {
     @Autowired
     private SpecialOfferRepository repository;
 
-    /* show */
+    /* index */
     @GetMapping
     public String getSpecialOffersList(Model model) {
         List<SpecialOffer> specialOffers;

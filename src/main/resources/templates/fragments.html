@@ -25,10 +25,12 @@
             <div th:if="${type == 'listaPizze'}" class="d-flex gap-4">
                 <a th:href="@{/}" class="btn btn-outline-primary">Torna all'homepage</a>
                 <a th:href="@{/pizze/create}" class="btn btn-outline-primary">Crea la tua Pizza</a>
+                <a th:href="@{/ingredient/create}" class="btn btn-outline-primary">Aggiungi Ingredienti</a>
             </div>
             <div th:if="${type == 'createPage' or type == 'editPage'}" class="d-flex gap-4">
                 <a th:href="@{/}" class="btn btn-outline-primary">Torna all'homepage</a>
                 <a th:href="@{/pizze}" class="btn btn-outline-primary">Lista delle Pizze</a>
+                <a th:href="@{/ingredient/create}" class="btn btn-outline-primary">Aggiungi Ingredienti</a>
             </div>
         </nav>
     </th:block>
@@ -117,9 +119,19 @@
                     <!-- info -->
                     <h1>[[*{nome}]]</h1>
                     <ul>
-                        <li><span class="fw-bold">Descrizione:</span> [[*{descrizione}]]</li>
+                        <!-- <li><span class="fw-bold">Descrizione:</span> [[*{descrizione}]]</li> -->
                         <li><span class="fw-bold">Prezzo:</span> [[*{prezzo}]]€</li>
                     </ul>
+
+                    <th:block th:if="${pizza.getIngredients().size() > 0}">
+                        <span class="fw-bold">Ingredienti:</span>
+                        <ul class="mb-3 ps-4">
+                            <li th:each="ingredient : *{ingredients}" th:text="${ingredient.nome}"/>
+                        </ul> 
+                    </th:block>
+                    <th:block th:unless="${pizza.getIngredients().size() > 0}">
+                        <p class="mb-3 alert alert-info">Questa pizza non ha ingredienti</p>
+                    </th:block>
 
                     <!-- icons -->
                     <div class="d-flex justify-content-start gap-2">
@@ -195,8 +207,8 @@
                                             <i class="bi bi-trash3"></i>
                                         </button>
                                         <!-- modale -->
-                                        <div class="modal fade" th:id="|delete-modal-${specialOffer.id}|"
-                                            tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" th:id="|delete-modal-${specialOffer.id}|" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -248,6 +260,21 @@
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
             </div>
 
+            <!-- Ingredienti -->
+            <div class="mb-3">
+                <span>Ingredienti</span>
+                <div class="d-flex flex-wrap">
+                    <div class="single-ingredient form-check mt-2 col-3" th:each="ingredient : ${ingredients}">
+                        <div>
+                            <input type="checkbox" th:id="|ingredient-${ingredient.id}|" th:field="${pizza.ingredients}"
+                                th:value="${ingredient.id}">
+                            <label th:for="|ingredient-${ingredient.id}|" class="form-check-label"
+                                th:text="${ingredient.nome}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Descrizione -->
             <div class="mb-3">
                 <label for="descrizione" class="form-label">Descrizione</label>
@@ -290,6 +317,21 @@
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
             </div>
 
+            <!-- Ingredienti -->
+            <div class="mb-3">
+                <span>Ingredienti</span>
+                <div class="d-flex flex-wrap">
+                    <div class="single-ingredient form-check mt-2 col-3" th:each="ingredient : ${ingredients}">
+                        <div>
+                            <input type="checkbox" th:id="|ingredient-${ingredient.id}|" th:field="${pizza.ingredients}"
+                                th:value="${ingredient.id}">
+                            <label th:for="|ingredient-${ingredient.id}|" class="form-check-label"
+                                th:text="${ingredient.nome}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Descrizione -->
             <div class="mb-3">
                 <label for="descrizione" class="form-label">Descrizione</label>
@@ -322,9 +364,9 @@
     </th:block>
 
     <!-- form create or edit -->
-    <th:block th:fragment="specialOfferForm" >
+    <th:block th:fragment="specialOfferForm">
         <form id="pizza-form" th:action="${edit} ? @{|/specialOffer/edit/${specialOffer.id}|} : @{/specialOffer/create}"
-             method="post" th:object="${specialOffer}">
+            method="post" th:object="${specialOffer}">
             <input type="hidden" th:field="*{pizza}" id="linked-pizza">
 
             <!-- Nome -->
@@ -361,7 +403,8 @@
             </div>
 
             <!-- Pulsanti -->
-            <button type="submit" class="btn btn-success" th:text="${edit} ? 'Modifica offerta' : 'Aggiungi Offerta'"></button>
+            <button type="submit" class="btn btn-success"
+                th:text="${edit} ? 'Modifica offerta' : 'Aggiungi Offerta'"></button>
             <a th:href="@{/pizze/index}" class="btn btn-warning">Annulla</a>
         </form>
     </th:block>

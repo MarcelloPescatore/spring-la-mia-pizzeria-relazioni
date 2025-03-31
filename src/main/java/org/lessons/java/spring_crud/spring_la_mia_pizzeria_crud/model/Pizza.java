@@ -10,7 +10,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -52,16 +55,11 @@ public class Pizza {
     @OneToMany(mappedBy = "pizza", cascade = {CascadeType.REMOVE})
     private List<SpecialOffer> specialOffers;
 
+    /* many to many */
+    @ManyToMany
+    @JoinTable( name = "ingredient_pizza", joinColumns = @JoinColumn(name = "pizza_id"), inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+    private List<Ingredient> ingredients;
 
-    /* Costruttori */
-    public Pizza(){};
-
-    public Pizza(String nome, String descrizione, String fotoUrl, Double prezzo) {
-        this.nome = nome;
-        this.descrizione = descrizione;
-        this.fotoUrl = fotoUrl;
-        this.prezzo = prezzo;
-    }
 
     /* getter e setter */
     public Integer getId() {
@@ -110,6 +108,20 @@ public class Pizza {
 
     public void setSpecialOffers(List<SpecialOffer> specialOffers){
         this.specialOffers = specialOffers;
+    }
+    
+    /**
+     * @return List<Ingredient> return the ingregients
+     */
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    /**
+     * @param ingredients the ingregients to set
+     */
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     /* toString */
